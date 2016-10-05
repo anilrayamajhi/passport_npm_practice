@@ -9,7 +9,8 @@ var
 	cookieParser = require('cookie-parser'),
 	bodyParser = require('body-parser'),
 	session = require('express-session'),
-	passport = require('passport')
+	passport = require('passport'),
+	userRoutes = require('./routes/users')
 
 // environment port
 var port = process.env.PORT || 3000
@@ -34,6 +35,9 @@ app.use(ejsLayouts)
 app.get('/', function(req,res){
 	res.render('index')
 })
+
+//all users routes:
+app.use('/', userRoutes)
 
 app.listen(port, function(){
 	console.log("Server running on port", port)
