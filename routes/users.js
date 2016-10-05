@@ -8,22 +8,33 @@ userRouter.route('/login')
     .get(function(req, res){
       res.render('login')
     })
-    .post(/*create session using passport*/)
+    /*create session using passport*/
+    .post(passport.authenticate('local-login', {
+      successRedirect: '/profile',
+      failureRedirect: '/login'
+    }))
 
 userRouter.route('/signup')
     .get(function(req, res){
       res.render('signup')
     })
-    .post(/*create account using passport*/)
+    /*create account using passport*/
+    .post(passport.authenticate('local-signup', {
+      successRedirect: '/profile',
+      failureRedirect: '/signup'
+    }))
 
 
 //isLoggedIn: filter, middleware
 userRouter.get('/profile', isLoggedIn, function(req, res) {
   //render the user profile
+  res.render('profile', {user: req.user})
 })
 
 userRouter.get('/logout', function(req, res){
   //destroy the session and redirect to the home page...
+  req.logout()
+  res.redirect('/')
 })
 
 //creating a middle ware

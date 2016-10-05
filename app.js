@@ -10,7 +10,9 @@ var
 	bodyParser = require('body-parser'),
 	session = require('express-session'),
 	passport = require('passport'),
-	userRoutes = require('./routes/users')
+	passportConfig = require('./config/passport'),
+	userRoutes = require('./routes/users'),
+	User = require('./models/User')
 
 // environment port
 var port = process.env.PORT || 3000
@@ -26,6 +28,15 @@ app.use(logger('dev'))
 app.use(cookieParser())
 app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
+app.use(session({
+	//create cookies on request
+	secret: 'boom',
+	cookie: {maxAge: 6000000}, //set timer for page remain logged in
+	resave: true, //reset timer once an action is done in the page
+	saveUninitialized: false
+}))
+app.use(passport.initialize())
+app.use(passport.session())
 
 // ejs configuration
 app.set('view engine', 'ejs')
