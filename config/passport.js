@@ -29,6 +29,8 @@ passport.use('local-signup', new LocalStrategy({
     if(err) return done(err)
     //email is taken
     if(user) return done(null, false)
+    // if(password.length < 6) return done(err, false)
+    //and flash message can be used to show the password length is less than 6
     //neither of above happens then create user
     var newUser = new User()
     newUser.local.name = req.body.name
@@ -40,3 +42,25 @@ passport.use('local-signup', new LocalStrategy({
     })
   })
 }))
+
+
+//LOCAL LOG-IN:
+passport.use('local-login', new LocalStrategy({
+  usernameField: 'email',
+  passwordField: 'password',
+  passReqToCallback: true
+}, function(req, email, password, done){
+  //make sure that user exists, by searching DB:
+  User.findOne({'local.email': email}, function(err, user){
+    if(err) return done(err)
+    //flash would say: "no user found"
+    if(!user) return done(null, false)
+    //authenticate if the user has passed invalid password
+    if(!user.validPassword(password)) return done(null, false)
+
+    return done(null, user);
+  })
+}))
+
+
+module.exports = passport

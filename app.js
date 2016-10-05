@@ -4,7 +4,7 @@ var
 	ejs = require('ejs'),
 	ejsLayouts = require('express-ejs-layouts'),
 	mongoose = require('mongoose'),
-	flash = require('connect-flash'),
+	flash = require('connect-flash'),//flash message
 	logger = require('morgan'),
 	cookieParser = require('cookie-parser'),
 	bodyParser = require('body-parser'),
