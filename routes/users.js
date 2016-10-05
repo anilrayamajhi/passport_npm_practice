@@ -22,9 +22,14 @@ userRouter.get('/profile', isLoggedIn, function(req, res) {
   //render the user profile
 })
 
+userRouter.get('/logout', function(req, res){
+  //destroy the session and redirect to the home page...
+})
+
 //creating a middle ware
 function isLoggedIn(req, res, next) {
   if(req.isAuthenticated()) return next()
+  res.redirect('/')
 }
 
 module.exports = userRouter
