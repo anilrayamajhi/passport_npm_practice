@@ -6,9 +6,9 @@ var
 	mongoose = require('mongoose'),
 	flash = require('connect-flash'),//flash message
 	logger = require('morgan'),
-	cookieParser = require('cookie-parser'),
+	cookieParser = require('cookie-parser'),//like first bouncer//look fir cookie on every incoming
 	bodyParser = require('body-parser'),
-	session = require('express-session'),
+	session = require('express-session'),//generate cookies
 	passport = require('passport'),
 	passportConfig = require('./config/passport'),
 	userRoutes = require('./routes/users'),
@@ -30,7 +30,7 @@ app.use(bodyParser.urlencoded({extended: true}))
 app.use(bodyParser.json())
 app.use(session({
 	//create cookies on request
-	secret: 'boom',
+	secret: 'boom',//this makes cookie unique to application
 	cookie: {maxAge: 6000000}, //set timer for page remain logged in
 	resave: true, //reset timer once an action is done in the page
 	saveUninitialized: false
