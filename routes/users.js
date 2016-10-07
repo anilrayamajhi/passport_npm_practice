@@ -1,4 +1,6 @@
 //user routes
+//
+//routes doesnot require module path bcoz it used channel to authenticate user via npm 'passport'. channel makes it globally available in app via channel or also known as name, find example in:  (**)
 var
   express = require('express'),
   passport = require('passport'),
@@ -9,6 +11,7 @@ userRouter.route('/login')
       res.render('login')
     })
     /*create session using passport*/
+    //example of (**)
     .post(passport.authenticate('local-login', {
       successRedirect: '/profile',
       failureRedirect: '/login'
@@ -16,7 +19,7 @@ userRouter.route('/login')
 
 userRouter.route('/signup')
     .get(function(req, res){
-      res.render('signup')
+      res.render('signup', {message: req.flash('signupMessage')})
     })
     /*create account using passport*/
     .post(passport.authenticate('local-signup', {

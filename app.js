@@ -33,10 +33,19 @@ app.use(session({
 	secret: 'boom',//this makes cookie unique to application
 	cookie: {maxAge: 6000000}, //set timer for page remain logged in
 	resave: true, //reset timer once an action is done in the page
-	saveUninitialized: false
+	saveUninitialized: false //
 }))
 app.use(passport.initialize())
 app.use(passport.session())
+app.use(flash())
+
+//create a middleware to add a current user to be available in every view; view logged in user in terminal backend
+app.use(function(req, res, next){
+//req.app.locals is express; this makes currentUser/loggedIn to be available in view
+	if(req.user) req.app.locals.currentUser = req.user
+	req.app.locals.loggedIn = !!req.user
+	next();
+})
 
 // ejs configuration
 app.set('view engine', 'ejs')

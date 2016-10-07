@@ -1,6 +1,6 @@
 var
   passport = require('passport'),
-  LocalStrategy = require('passport-local').Strategy
+  LocalStrategy = require('passport-local').Strategy,
   //LocalStrategy is caps coz this is a constructor
   User = require('../models/User.js')
 
@@ -19,7 +19,7 @@ passport.deserializeUser(function(id, done) {
 //LOCAL SIGNUP:
 passport.use('local-signup', new LocalStrategy({
   //value should be same as we set in database; userSchema
-  usernameField: 'email',
+  usernameField: 'email', //maps email form field
   passwordField: 'password',
   passReqToCallback: true
 }, function(req, email, password, done) {
@@ -27,9 +27,15 @@ passport.use('local-signup', new LocalStrategy({
   User.findOne({'local.email': email}, function(err, user) {
     //there was a problem
     if(err) return done(err)
+
+    // req.flash('signupFailure', 'This email is taken')
+    //like signupMessage; flash has signupFailure, signupSuccess
+    // flash message or second arugment can be used as an object so that flash message can be invoked point the object key
+    // eg: req.flash('signupFailure', {one: 'This email is taken', two: 'supp'})
+
     //email is taken
-    if(user) return done(null, false)
-    // if(password.length < 6) return done(err, false)
+    if(user) return done(null, false, req.flash('signupMessage', 'This email is taken'))
+    if(password.length < 5) return done(err, false, req.flash('signupMessage', 'Please make sure your password is longer than 4 character'))
     //and flash message can be used to show the password length is less than 6
     //neither of above happens then create user
     var newUser = new User()
